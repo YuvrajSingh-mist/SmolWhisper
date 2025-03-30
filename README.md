@@ -27,7 +27,7 @@
 | `embeddings_dims`       | Hidden dimension size          | 512           |
 | `no_of_heads`          | Attention heads                | 4             |
 | `no_of_decoder_layers` | Transformer layers             | 6             |
-| `tgt_vocab_size`       | Vocabulary size                | len(tokenizer)|
+| `tgt_vocab_size`       | Vocabulary size                | 32768|
 
 ## Audio Processing
 | Parameter               | Description                     | Default Value |
