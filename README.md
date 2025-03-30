@@ -96,9 +96,7 @@
 
 ![Train Loss Curves](data/images/loss.jpg)
 
-
 --- 
-
 
 ### Local setup
 
