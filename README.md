@@ -10,7 +10,7 @@
 
 #### Dataset
 
- - I used the [GigaSpeech](https://huggingface.co/datasets/HuggingFaceFW/fineweb?row=0) dataset from HuggingFace ('s' checkpoint) consisting of roughly 250 hrs.
+ - I used the [GigaSpeech]([https://huggingface.co/datasets/HuggingFaceFW/fineweb?row=0](https://huggingface.co/datasets/speechcolab/gigaspeech)) dataset from HuggingFace ('s' checkpoint) consisting of roughly 250 hrs.
 
   1) Train dataset - 200k rows
   2) Val dataset - 4k rows
