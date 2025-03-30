@@ -20,42 +20,40 @@
 
 ####  ModelArgs (Hyperparameters)
 
+## Model Architecture
+| Parameter               | Description                     | Default Value | Range          |
+|-------------------------|---------------------------------|---------------|----------------|
+| `block_size`            | Context window length          | 256           | 64-4096        |
+| `embeddings_dims`       | Hidden dimension size          | 512           | 128-4096       |
+| `no_of_heads`          | Attention heads                | 8             | 4-32           |
+| `no_of_decoder_layers` | Transformer layers             | 16            | 4-64           |
+| `experts`              | Total MoE experts              | 8             | 2-128          |
+| `top_experts`          | Active experts per token       | 2             | 1-4            |
 
-| Parameter                      | Description                                                                 | Default Value                     | Type      |
-|--------------------------------|-----------------------------------------------------------------------------|-----------------------------------|-----------|
-| `epochs`                       | Number of training epochs                                                   | `4`                               | `int`     |
-| `block_size`                   | Size of each block (context length)                                         | `512`                             | `int`     |
-| `batch_size`                   | Batch size for training                                                    | `64`                              | `int`     |
-| `inference`                    | Inference mode (not specified)                                              | `None`                            | `None`    |
-| `embeddings_dims`              | Dimensionality of embeddings                                                | `512`                             | `int`     |
-| `attn_dropout`                 | Dropout rate for attention layers                                           | `0.1`                             | `float`   |
-| `no_of_heads`                  | Number of attention heads                                                   | `8`                               | `int`     |
-| `dropout`                      | Dropout rate for the model                                                  | `0.1`                             | `float`   |
-| `val_epochs`                   | Number of validation epochs                                                 | `2`                               | `int`     |
-| `max_lr`                       | Maximum learning rate                                                       | `6e-4`                            | `float`   |
-| `no_of_decoder_layers`         | Number of decoder layers                                                    | `8`                               | `int`     |
-| `weight_decay_optim`           | Weight decay for the optimizer                                              | `0.1`                             | `float`   |
-| `beta_1`                       | Beta 1 for Adam optimizer                                                   | `0.9`                             | `float`   |
-| `beta_2`                       | Beta 2 for Adam optimizer                                                   | `0.95`                            | `float`   |
-| `clip`                         | Gradient clipping value                                                     | `1.0`                             | `float`   |
-| `device`                       | Device to run the model (`cuda` or `cpu`)                                   | `'cuda'`                          | `str`     |
-| `no_kv_heads`                  | Number of key-value heads                                                   | `2`                               | `int`     |
-| `vocab_size`                   | Size of the vocabulary                                                      | `50304`                           | `int`     |
-| `eps`                          | Epsilon value for numerical stability                                       | `1e-5`                            | `float`   |
-| `dtype`                        | Data type for tensors (`bfloat16` if supported, else `float16`)             | `'bfloat16'` or `'float16'`       | `str`     |
-| `save_checkpoint_dir`          | Directory to save model checkpoints                                         | `"checkpoints"`                   | `str`     |
-| `prompt`                       | Default prompt for inference                                                | `"Once upon a time"`              | `str`     |
-| `save_checkpoint_iter`         | Save checkpoint every N iterations                                         | `50`                              | `int`     |
-| `total_iters`                  | Total number of training iterations                                        | `10000`                           | `int`     |
-| `eval_iters`                   | Evaluate model every N iterations                                          | `50`                              | `int`     |
-| `eval_check`                   | Check evaluation metrics every N iterations                                | `100`                             | `int`     |
-| `warmup_iters`                 | Number of warmup iterations for learning rate scheduling                   | `700`                             | `int`     |
-| `min_lr`                       | Minimum learning rate (10% of `max_lr`)                                     | `0.1 * max_lr`                    | `float`   |
-| `lr_decay_iters`               | Number of iterations for learning rate decay                               | `10000`                           | `int`     |
-| `total_batch_size`             | Total batch size across all devices                                         | `524288`                          | `int`     |
-| `micro_batch_size`             | Micro batch size per device                                                | `batch_size`                      | `int`     |
-| `gradient_accumulation_steps`  | Gradient accumulation steps                                                 | `total_batch_size // (micro_batch_size * (block_size * torch.cuda.device_count()))` | `int` |
-| `no_kv_heads`                  | Number of key-value heads                                                   | `2`                               | `int`     |
+## Training Configuration
+| Parameter               | Description                     | Default Value | Typical Range   |
+|-------------------------|---------------------------------|---------------|-----------------|
+| `batch_size`           | Per-GPU batch size             | 128           | 32-1024         |
+| `total_batch_size`     | Global batch size              | 524288        | 32k-2M          |
+| `max_lr`              | Peak learning rate             | 6e-4          | 1e-5 to 1e-3    |
+| `min_lr`              | Minimum learning rate          | 6e-5          | 1e-6 to 1e-4    |
+| `weight_decay_optim`  | AdamW weight decay             | 0.1           | 0.0-0.2         |
+| `clip`                | Gradient clipping              | 1.0           | 0.1-5.0         |
+
+## Optimization Schedule
+| Parameter               | Description                     | Default Value | Notes           |
+|-------------------------|---------------------------------|---------------|-----------------|
+| `warmup_iters`         | LR warmup steps                | 700           | ~5% of total iters |
+| `lr_decay_iters`       | LR decay duration              | 20000         | =total_iters    |
+| `gradient_accumulation_steps` | Micro-batch steps      | 4096          | total_batch_size/(batch_size*n_gpus) |
+
+## Regularization
+| Parameter               | Description                     | Default Value | Effect          |
+|-------------------------|---------------------------------|---------------|-----------------|
+| `dropout`              | General dropout rate           | 0.1           | 0.0-0.3         |
+| `attn_dropout`         | Attention dropout              | 0.1           | 0.0-0.3         |
+
+
 ---
 ### Hardware Setup
 
