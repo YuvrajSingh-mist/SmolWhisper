@@ -20,39 +20,47 @@
 
 ####  ModelArgs (Hyperparameters)
 
-## Model Architecture
-| Parameter               | Description                     | Default Value | Range          |
-|-------------------------|---------------------------------|---------------|----------------|
-| `block_size`            | Context window length          | 256           | 64-4096        |
-| `embeddings_dims`       | Hidden dimension size          | 512           | 128-4096       |
-| `no_of_heads`          | Attention heads                | 8             | 4-32           |
-| `no_of_decoder_layers` | Transformer layers             | 16            | 4-64           |
-| `experts`              | Total MoE experts              | 8             | 2-128          |
-| `top_experts`          | Active experts per token       | 2             | 1-4            |
+## Core Architecture
+| Parameter               | Description                     | Default Value |
+|-------------------------|---------------------------------|---------------|
+| `block_size`            | Context window length          | 64            |
+| `embeddings_dims`       | Hidden dimension size          | 512           |
+| `no_of_heads`          | Attention heads                | 4             |
+| `no_of_decoder_layers` | Transformer layers             | 6             |
+| `tgt_vocab_size`       | Vocabulary size                | len(tokenizer)|
 
-## Training Configuration
-| Parameter               | Description                     | Default Value | Typical Range   |
-|-------------------------|---------------------------------|---------------|-----------------|
-| `batch_size`           | Per-GPU batch size             | 128           | 32-1024         |
-| `total_batch_size`     | Global batch size              | 524288        | 32k-2M          |
-| `max_lr`              | Peak learning rate             | 6e-4          | 1e-5 to 1e-3    |
-| `min_lr`              | Minimum learning rate          | 6e-5          | 1e-6 to 1e-4    |
-| `weight_decay_optim`  | AdamW weight decay             | 0.1           | 0.0-0.2         |
-| `clip`                | Gradient clipping              | 1.0           | 0.1-5.0         |
+## Audio Processing
+| Parameter               | Description                     | Default Value |
+|-------------------------|---------------------------------|---------------|
+| `log_mel_features`     | Mel filterbank channels        | 80            |
+| `kernel_size`          | Convolution kernel size        | 3             |
+| `stride`               | Conv stride (time,freq)        | (2,10)        |
+| `SAMPLING_RATE`        | Audio sample rate (Hz)         | 16000         |
+| `WINDOW_DURATION`      | STFT window (seconds)          | 0.025         |
+| `STRIDE_DURATION`      | STFT hop (seconds)             | 0.010         |
 
-## Optimization Schedule
-| Parameter               | Description                     | Default Value | Notes           |
-|-------------------------|---------------------------------|---------------|-----------------|
-| `warmup_iters`         | LR warmup steps                | 700           | ~5% of total iters |
-| `lr_decay_iters`       | LR decay duration              | 20000         | =total_iters    |
-| `gradient_accumulation_steps` | Micro-batch steps      | 4096          | total_batch_size/(batch_size*n_gpus) |
+## Training Setup
+| Parameter               | Description                     | Default Value |
+|-------------------------|---------------------------------|---------------|
+| `batch_size`           | Per-GPU batch size             | 256           |
+| `total_batch_size`     | Global batch size              | 32768         |
+| `epochs`              | Training epochs                | 2             |
 
-## Regularization
-| Parameter               | Description                     | Default Value | Effect          |
-|-------------------------|---------------------------------|---------------|-----------------|
-| `dropout`              | General dropout rate           | 0.1           | 0.0-0.3         |
-| `attn_dropout`         | Attention dropout              | 0.1           | 0.0-0.3         |
+## Optimization
+| Parameter               | Description                     | Default Value |
+|-------------------------|---------------------------------|---------------|
+| `max_lr`              | Peak learning rate             | 1.5e-3        |
+| `min_lr`              | Minimum learning rate          | 3e-6          |
+| `weight_decay_optim`  | AdamW weight decay             | 0.1           |
+| `clip`                | Gradient clipping              | 1.0           |
+| `warmup_iters`        | LR warmup steps                | 700           |
 
+## Advanced Features
+| Parameter               | Description                     | Default Value |
+|-------------------------|---------------------------------|---------------|
+| `use_flash_attention`  | Enable FlashAttention          | True          |
+| `use_liger`            | Use LIGER optimizations        | True          |
+| `dtype`                | Floating precision             | bfloat16      |
 
 ---
 ### Hardware Setup
