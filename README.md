@@ -94,7 +94,7 @@
 
 - Pretrain
 
-![Train Loss Curves](images/loss.jpg)
+![Train Loss Curves](data/images/loss.jpg)
 
 
 --- 
