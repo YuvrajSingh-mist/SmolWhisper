@@ -19,7 +19,7 @@ tokenizer = Tokenizer().ready_tokenizer()
 import argparse
 import numpy as np
 
-
+HF_TOKEN = '...'
 gs = load_dataset("speechcolab/gigaspeech", "s", token=HF_TOKEN, trust_remote_code=True)
 
 
